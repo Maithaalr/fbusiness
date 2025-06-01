@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -7,15 +6,17 @@ from io import BytesIO
 # --- Setup ---
 st.set_page_config(page_title="Business Dashboard", layout="centered")
 
+st.title("Future Business Center")
+
 
 # --- Tabs ---
-tab1, tab2 = st.tabs(["📊 Dashboard", "📈 Business Insights"])
+tab1, tab2 = st.tabs([" Calculator", " Business Insights"])
 
 with tab1:
-    st.title("📊 Revenue and Expenses Calculator")
+    st.title(" Revenue and Expenses")
 
     # Revenue Input
-    st.subheader("💰 Revenue Items")
+    st.subheader(" Revenue Items")
     revenue_data = []
     num_revenue = st.number_input("How many revenue items?", min_value=1, max_value=10, step=1)
     for i in range(num_revenue):
@@ -29,7 +30,7 @@ with tab1:
     total_revenue = revenue_df["Amount"].sum()
 
     # Expense Input
-    st.subheader("💸 Expense Items")
+    st.subheader(" Expense Items")
     expense_data = []
     num_expense = st.number_input("How many expense items?", min_value=1, max_value=10, step=1)
     for i in range(num_expense):
@@ -47,16 +48,16 @@ with tab1:
     profit_percent = (profit / total_revenue * 100) if total_revenue > 0 else 0
 
     # Summary
-    st.subheader("📈 Summary")
+    st.subheader(" Summary")
     st.write(f"**Total Revenue:** AED {total_revenue:,.2f}")
     st.write(f"**Total Expenses:** AED {total_expenses:,.2f}")
     if profit >= 0:
-        st.success(f"✅ Profit: AED {profit:,.2f} ({profit_percent:.2f}%)")
+        st.success(f" Profit: AED {profit:,.2f} ({profit_percent:.2f}%)")
     else:
-        st.error(f"❌ Loss: AED {abs(profit):,.2f} ({abs(profit_percent):.2f}%)")
+        st.error(f" Loss: AED {abs(profit):,.2f} ({abs(profit_percent):.2f}%)")
 
     # Plotly Chart
-    st.subheader("📊 Revenue vs Expenses vs Profit")
+    st.subheader(" Revenue vs Expenses vs Profit")
     fig = go.Figure(data=[
         go.Bar(name="Revenue", x=["Revenue"], y=[total_revenue], marker_color="rgb(93, 173, 226)",
                text=[f"AED {total_revenue:,.2f}"], textposition="auto",
@@ -72,21 +73,21 @@ with tab1:
     st.plotly_chart(fig, use_container_width=True)
 
     # Excel Export
-    st.subheader("📥 Download Excel")
+    st.subheader(" Download Excel")
     if st.button("Download All Data as Excel"):
         output = BytesIO()
         with pd.ExcelWriter(output, engine="openpyxl") as writer:
             revenue_df.to_excel(writer, index=False, sheet_name="Revenue")
             expense_df.to_excel(writer, index=False, sheet_name="Expenses")
-        st.download_button("📥 Click to Download", output.getvalue(), file_name="business_data.xlsx")
+        st.download_button(" Click to Download", output.getvalue(), file_name="business_data.xlsx")
 
 with tab2:
-    st.title("📈 Business Insights")
+    st.title(" Business Insights")
     if not revenue_df.empty and not expense_df.empty:
         max_rev = revenue_df.loc[revenue_df["Amount"].idxmax()]
         max_exp = expense_df.loc[expense_df["Amount"].idxmax()]
-        st.write(f"🔹 Highest Revenue Item: **{max_rev['Item']}** — AED {max_rev['Amount']:,.2f}")
-        st.write(f"🔸 Highest Expense Item: **{max_exp['Item']}** — AED {max_exp['Amount']:,.2f}")
+        st.write(f" Highest Revenue Item: **{max_rev['Item']}** — AED {max_rev['Amount']:,.2f}")
+        st.write(f" Highest Expense Item: **{max_exp['Item']}** — AED {max_exp['Amount']:,.2f}")
 
         col1, col2 = st.columns(2)
         with col1:
